@@ -4,7 +4,8 @@ import { Dimensions, StyleSheet, Text, View } from 'react-native'
 export default function (props){
 return(
 <View style={styles.display}>
-    <Text numberOfLines="1" style={{textAlign:"right", fontSize:35, margin:10}}>{props.valor}</Text>
+    <Text>{props.opCompleta}</Text>
+    <Text numberOfLines={1} style={{textAlign:"right", fontSize:35, margin:10}}>{props.valor}</Text>
 </View>
 )
 }

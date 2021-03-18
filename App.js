@@ -9,7 +9,7 @@ export default function App() {
   const [valorDisplay, setvalorDisplay] = useState('0')
   const [refresh, setRefresh]= useState(true)
   const [novoDigito, setNovoDigito] = useState(false)
-  const [operacao, setOperacao] = useState()
+  const [operacao, setOperacao] = useState()  
   const addDigito = (digito) =>{
     setNovoDigito(true)
     setvalorDisplay(refresh?digito:`${valorDisplay}${digito}`)
@@ -29,31 +29,75 @@ export default function App() {
       setOperacao(operacao)
        
     }
+    else{
+      setOperacao(operacao)
+    }
     setNovoDigito(false)  
     console.warn(valores)
     
   }
   const resultado = ()=>{
-    console.warn(operacao)
-    switch (operacao){
-      case '+': console.warn(valores[0]+valores[1])
-      case 'x': console.warn(valores[0]*valores[1])
-      case '-': console.warn(valores[0]-valores[1])
-      case '/': console.warn(valores[0]/valores[1])
+    if(valores.length<2){
+      const atualizado = valores
+      atualizado.push(parseFloat(valorDisplay))
+      setValores(atualizado)
+
     }
+    console.warn(operacao)
+    if(operacao === '-'){
+      setValores([valores[0]-valores[1]])
+      setvalorDisplay(valores[0]-valores[1])
+    }
+    if(operacao === 'x'){
+      setValores([valores[0]*valores[1]])
+      setvalorDisplay(valores[0]*valores[1])
+    }
+    if(operacao === `/`){
+      setValores([valores[0]/valores[1]])
+      setvalorDisplay(valores[0]/valores[1])
+    }
+    if(operacao === '+'){
+      setValores([valores[0]+valores[1]])
+      setvalorDisplay(valores[0]+valores[1])
+    }
+    setRefresh(true)
+    setNovoDigito(false)
+  }
+  const limpa =()=>{
+
+      setRefresh(true)
+      setvalorDisplay(0)
+    
+  }
+  const limpatudo = ()=>{
+    setValores([])
+    setvalorDisplay(0)
+    setRefresh(true)
+  }
+  const apaga =()=>{
+    if(valorDisplay.toString().length>1){
+      const novoValor = valorDisplay.toString().slice(0, -1)
+      setvalorDisplay(parseFloat(novoValor))
+    }
+    else{
+      setvalorDisplay(0)
+      setRefresh(true)
+    }
+    
+    
   }
   return (
     <View style={styles.container}>
-      <Display valor={valorDisplay}/>
+      <Display valor={valorDisplay} opCompleta={valores.length>0?`${valores[0]} ${operacao} ${valores[1]?valores[1]:""}`:""}/>
       <View style={styles.botoes}>
         <Botao valor='%' />
-        <Botao valor='CE' />
-        <Botao valor='C' />
-        <Botao valor='Apaga' />
+        <Botao valor='CE' onClick={()=>limpa()}/>
+        <Botao valor='C' onClick={limpatudo}/>
+        <Botao valor='Apaga' onClick={apaga}/>
         <Botao valor='1/x' />
         <Botao valor='x²' />
         <Botao valor='sqrt' />
-        <Botao valor='/' onClick={()=>addOperacao('/')}/>
+        <Botao valor='/' onClick={()=>addOperacao(`/`)}/>
         <Botao valor='7' bg="#D0D3DC" onClick={()=>addDigito(7)} />
         <Botao valor='8' bg="#D0D3DC" onClick={()=>addDigito(8)} />
         <Botao valor='9' bg="#D0D3DC" onClick={()=>addDigito(9)} />
@@ -69,7 +113,7 @@ export default function App() {
         <Botao valor='+/-'bg="#D0D3DC" />
         <Botao valor='0' bg="#D0D3DC" onClick={()=>addDigito(0)} />
         <Botao valor=',' bg="#D0D3DC" />
-        <Botao valor='=' bg="#AACDE9"/>
+        <Botao valor='=' bg="#AACDE9" onClick={()=>resultado()}/>
 
       </View>
     </View>
