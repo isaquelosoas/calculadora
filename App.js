@@ -9,15 +9,13 @@ export default function App() {
   const [valorDisplay, setvalorDisplay] = useState('0')
   const [refresh, setRefresh]= useState(true)
   const [novoDigito, setNovoDigito] = useState(false)
-  const [operacao, setOperacao] = useState()  
+  const [operacao, setOperacao] = useState()    
   const addDigito = (digito) =>{
     setNovoDigito(true)
     setvalorDisplay(refresh?digito:`${valorDisplay}${digito}`)
     setRefresh(false)
   }
-  const addOperacao = (operacao)=>{
-    
-    
+  const addOperacao = (operacao)=>{   
     setRefresh(true)
     const atualizado = valores
     if(novoDigito){ 
@@ -33,7 +31,7 @@ export default function App() {
       setOperacao(operacao)
     }
     setNovoDigito(false)  
-    console.warn(valores)
+    
     
   }
   const resultado = ()=>{
@@ -43,7 +41,7 @@ export default function App() {
       setValores(atualizado)
 
     }
-    console.warn(operacao)
+    
     if(operacao === '-'){
       setValores([valores[0]-valores[1]])
       setvalorDisplay(valores[0]-valores[1])
@@ -86,17 +84,46 @@ export default function App() {
     
     
   }
+  const porcentagem = ()=>{
+    const porcentagem = valores.length>0? valorDisplay/100*valores[0]:0
+    setvalorDisplay(porcentagem)
+    setRefresh(true) 
+  }
+  const mudaSinal = () =>{
+    const novoNum = valorDisplay-valorDisplay*2
+    setvalorDisplay(novoNum)
+    
+  }
+  const eleva = () =>{
+    const novoNum = valorDisplay**2
+    setvalorDisplay(novoNum)
+  }
+  const raizQuadrada = () =>{
+    const novoNum = valorDisplay**(1/2)
+    setvalorDisplay(novoNum)
+  }
+  const inverter = () =>{
+    const novoNum = (1/valorDisplay)
+    setvalorDisplay(novoNum)
+  }
+  const addPonto=()=>{
+    if(valorDisplay.indexOf('.')<0){
+      const novoValor = `${valorDisplay}.`
+      setvalorDisplay(novoValor)
+    }
+    
+  }
   return (
     <View style={styles.container}>
       <Display valor={valorDisplay} opCompleta={valores.length>0?`${valores[0]} ${operacao} ${valores[1]?valores[1]:""}`:""}/>
       <View style={styles.botoes}>
-        <Botao valor='%' />
+        <Botao valor='%' onClick={porcentagem}/>
         <Botao valor='CE' onClick={()=>limpa()}/>
         <Botao valor='C' onClick={limpatudo}/>
         <Botao valor='Apaga' onClick={apaga}/>
-        <Botao valor='1/x' />
-        <Botao valor='x²' />
-        <Botao valor='sqrt' />
+        <Botao valor='1/x' onClick={inverter}/>
+        <Botao valor='x²' onClick={eleva}/>
+        <Botao valor='sqrt' onClick={raizQuadrada} />
         <Botao valor='/' onClick={()=>addOperacao(`/`)}/>
         <Botao valor='7' bg="#D0D3DC" onClick={()=>addDigito(7)} />
         <Botao valor='8' bg="#D0D3DC" onClick={()=>addDigito(8)} />
@@ -110,9 +137,9 @@ export default function App() {
         <Botao valor='2' bg="#D0D3DC" onClick={()=>addDigito(2)} />
         <Botao valor='3' bg="#D0D3DC" onClick={()=>addDigito(3)} />
         <Botao valor='+' onClick={()=>addOperacao('+')}/>
-        <Botao valor='+/-'bg="#D0D3DC" />
+        <Botao valor='+/-'bg="#D0D3DC" onClick={mudaSinal}/>
         <Botao valor='0' bg="#D0D3DC" onClick={()=>addDigito(0)} />
-        <Botao valor=',' bg="#D0D3DC" />
+        <Botao valor=',' bg="#D0D3DC" onClick={addPonto}/>
         <Botao valor='=' bg="#AACDE9" onClick={()=>resultado()}/>
 
       </View>
